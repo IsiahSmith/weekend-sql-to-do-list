@@ -2,6 +2,7 @@ const express = require('express');
 const listRouter = express.Router();
 const pool = require(`../modules/pool.js`);
 
+// SERVER SIDE GET
 listRouter.get('/', (req, res) => {
     let queryText = `
     SELECT * FROM "to_do_list" ORDER BY "id" DESC;
@@ -15,6 +16,7 @@ listRouter.get('/', (req, res) => {
     });
 });
 
+// SERVER SIDE POST
 listRouter.post('/', (req, res) => {
     let newTask = req.body;
     console.log('Adding Task', newTask);
@@ -32,7 +34,22 @@ listRouter.post('/', (req, res) => {
     });
 });
 
-
+// SERVER SIDE PUT
+listRouter.put('/:id', (req, res) => {
+    let id = req.params.id;
+    let queryText = `
+    UPDATE "to_do_list"
+    SET "complete" = true
+    WHERE "id" = $1;
+    `;
+    pool.query(queryText, [id])
+    .then(() => {
+        res.sendStatus(200)
+    }).catch((error) => {
+        console.log('Error at server side PUT', error);
+        res.sendStatus(500)
+    });
+});
 
 
 
