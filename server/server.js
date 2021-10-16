@@ -5,7 +5,7 @@ const listRouter = require('./routes/list.router')
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('server/public'));
-app.use('/to_do_list', listRouter);
+app.use('/listRouter', listRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
