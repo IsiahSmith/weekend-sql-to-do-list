@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>To Do List</title>
+    <script src="vendors/jquery-3.6.0.js"></script>
+    <script src="scripts/client.js"></script>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <header>To Do List</header>
+    <div>
+        <input type="text" id="taskIn" placeholder="Task">
+        <select name="complete" id="completeIn">
+            <option hidden="hidden">Complete?</option>
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+        </select>
+        <input type="text" id="completeByIn" placeholder="Complete By">
+        <input type="text" id="notesIn" placeholder="Additional Notes">
+        <button type="button" id="addTaskBtn">Add Task</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Complete?</th>
+                <th>Complete By</th>
+                <th>Additional Notes</th>
+            </tr>
+        </thead>
+        <tbody id="taskDrop">
+            <!-- inputted tasks go here -->
+        </tbody>
+    </table>
+</body>
+
+</html>
