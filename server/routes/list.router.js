@@ -26,7 +26,6 @@ listRouter.post('/', (req, res) => {
     `;
     pool.query(queryText, [newTask.task, newTask.complete, newTask.complete_by, newTask.notes])
     .then((result) => {
-        console.log('Task Added: ', result);
         res.sendStatus(201);
     }).catch((error) => {
         console.log('Error at server side POST', error);
@@ -66,6 +65,5 @@ listRouter.delete('/:id', (req, res) => {
         res.sendStatus(500);
     });
 });
-
 
 module.exports = listRouter;
