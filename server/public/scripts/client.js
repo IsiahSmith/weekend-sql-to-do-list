@@ -7,6 +7,7 @@ function onReady() {
     getTasks();
 };
 
+
 function clickListeners() {
     $(`#addTaskBtn`).on(`click`, function () {
         let newTask = {
@@ -19,3 +20,16 @@ function clickListeners() {
     });
 };
 
+
+function getTasks() {
+    $.ajax({
+        method: `GET`,
+        url: `/tasks`
+    }).then(function(response) {
+        console.log('In client side GET');
+        //render function
+    }).catch(function(error) {
+        console.log('Error at client side GET', error);
+        res.sendStatus(500);
+    });
+};
