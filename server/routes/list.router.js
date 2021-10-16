@@ -5,7 +5,7 @@ const pool = require(`../modules/pool.js`);
 // SERVER SIDE GET
 listRouter.get('/', (req, res) => {
     let queryText = `
-    SELECT * FROM "to_do_list" ORDER BY "id" DESC;
+    SELECT * FROM "weekend-to-do-app" ORDER BY "id" DESC;
     `;
     pool.query(queryText)
     .then(result => {
@@ -21,7 +21,7 @@ listRouter.post('/', (req, res) => {
     let newTask = req.body;
     console.log('Adding Task', newTask);
     let queryText = `
-    INSERT INTO "to_do_list" ("task", "complete", "complete_by", "notes")
+    INSERT INTO "weekend-to-do-app" ("task", "complete", "complete_by", "notes")
     VALUES ($1, $2, $3, $4);
     `;
     pool.query(queryText, [newTask.task, newTask.complete, newTask.complete_by, newTask.notes])
@@ -38,7 +38,7 @@ listRouter.post('/', (req, res) => {
 listRouter.put('/:id', (req, res) => {
     let id = req.params.id;
     let queryText = `
-    UPDATE "to_do_list"
+    UPDATE "weekend-to-do-app"
     SET "complete" = true
     WHERE "id" = $1;
     `;
@@ -51,7 +51,21 @@ listRouter.put('/:id', (req, res) => {
     });
 });
 
-
+// SERVER SIDE DELETE
+listRouter.delete('/:id', (req, res) => {
+    let id = req.params.id;
+    let queryText = `
+    DELETE FROM "weekend-to-do-app"
+    WHERE "id" = $1;
+    `;
+    pool.query(queryText, [id])
+    .then((response => {
+        res.sendStatus(200);
+    })).catch((error) => {
+        console.log('Error at server side DELETE', error);
+        res.sendStatus(500);
+    });
+});
 
 
 module.exports = listRouter;
