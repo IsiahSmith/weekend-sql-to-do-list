@@ -19,6 +19,7 @@ function clickListeners() {
         sendTasks(taskToSend);
     });
     $(`#taskDrop`).on(`click`, `.completeBtn`, updateComplete);
+    $(`#taskDrop`).on(`click`, `.deleteBtn`, deleteTask);
 };
 
 // CLIENT SIDE GET
@@ -54,23 +55,40 @@ function sendTasks(newTask) {
 function renderTasks(tasks) {
     $(`#taskDrop`).empty();
     for (let i = 0; i < tasks.length; i++) {
-        // let readyClass = ``;
-        // if (tasks[i].complete) {
-        //     readyClass = 'hidden';
-        // };
-        let taskEntry = (`
-        <tr data-id="${tasks[i].id}">
-            <td>${tasks[i].task}</td>
-            <td>${tasks[i].complete}</td>
-            <td>${tasks[i].complete_by}</td>
-            <td>${tasks[i].notes}</td>
-            <td>
-                <button class="completeBtn">Complete</button>
-                <button class="deleteBtn">Delete</button>
-            </td>
-        </tr>
+        let isComplete = ``;
+        if (tasks[i].complete) {
+            isComplete = 'hidden';
+            let completeBy = tasks[i].complete_by.split('T')[0];
+            let taskEntry = (`
+            <tr class="completed" data-id="${tasks[i].id}">
+              <td>${tasks[i].task}</td>
+              <td>${tasks[i].complete}</td>
+              <td>${completeBy}</td>
+              <td>${tasks[i].notes}</td>
+              <td>
+                 <button ${isComplete} class="completeBtn">Complete</button>
+                 <button class="deleteBtn">Delete</button>
+              </td>
+            </tr>
         `);
-        $(`#taskDrop`).append(taskEntry);
+            $(`#taskDrop`).append(taskEntry);
+        } else if (!tasks[i].complete) {
+            let completeBy = tasks[i].complete_by.split('T')[0];
+            let taskEntry = (`
+            <tr class="notCompleted" data-id="${tasks[i].id}">
+              <td>${tasks[i].task}</td>
+              <td>${tasks[i].complete}</td>
+              <td>${completeBy}</td>
+              <td>${tasks[i].notes}</td>
+              <td>
+                 <button ${isComplete} class="completeBtn">Complete</button>
+                 <button class="deleteBtn">Delete</button>
+              </td>
+            </tr>
+    `);
+            $(`#taskDrop`).append(taskEntry);
+
+        };
     };
 };
 
@@ -86,6 +104,21 @@ function updateComplete() {
         data: {
             complete: complete
         }
+    }).then(function (response) {
+        console.log(response);
+        getTasks();
+    }).catch(function (error) {
+        console.log(error);
+    });
+};
+
+// CLIENT SIDE DELETE
+function deleteTask() {
+    let idToDelete = $(this).closest(`tr`).data(`id`);
+
+    $.ajax({
+        method: `DELETE`,
+        url: `/weekend-to-do-app/${idToDelete}`
     }).then(function (response) {
         console.log(response);
         getTasks();
