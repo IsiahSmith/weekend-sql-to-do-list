@@ -18,6 +18,7 @@ function clickListeners() {
         };
         sendTasks(taskToSend);
     });
+    $(`#taskDrop`).on(`click`, `.completeBtn`, updateComplete);
 };
 
 // CLIENT SIDE GET
@@ -63,8 +64,32 @@ function renderTasks(tasks) {
             <td>${tasks[i].complete}</td>
             <td>${tasks[i].complete_by}</td>
             <td>${tasks[i].notes}</td>
+            <td>
+                <button class="completeBtn">Complete</button>
+                <button class="deleteBtn">Delete</button>
+            </td>
         </tr>
-        `); // DYNAMIC BUTTONS STILL NEEDED
+        `);
         $(`#taskDrop`).append(taskEntry);
     };
+};
+
+// CLIENT SIDE PUT
+function updateComplete() {
+    let complete = $(this).text();
+    let id = $(this).closest(`tr`).data(`id`);
+    console.log(id, complete);
+
+    $.ajax({
+        method: `PUT`,
+        url: `/weekend-to-do-app/${id}`,
+        data: {
+            complete: complete
+        }
+    }).then(function (response) {
+        console.log(response);
+        getTasks();
+    }).catch(function (error) {
+        console.log(error);
+    });
 };
